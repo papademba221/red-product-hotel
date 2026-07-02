@@ -1,28 +1,43 @@
 const express = require('express');
+const cors = require('cors');
+
+require('dotenv').config();
+
 const connectBD = require('./config/bd');
-const dotenv = require('dotenv');
+
 const authRoute = require('./routes/auth.route');
-const hotel = require('./routes/hotel.route');
+const hotelRoute = require('./routes/hotel.route');
+const uploadRoutes = require("./routes/upload");
 
-
-
-dotenv.config();
 const app = express();
+
 connectBD();
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" })); // important pour image base64
 
-app.use('/api/auth',authRoute);
+app.use(cors({
+  origin: [
+    "http://localhost:5500",      // Live Server VS Code
+    "http://127.0.0.1:5500",     // Live Server alternative
+    "http://localhost:3000",      // Si tu testes depuis le backend lui-même
+    "https://ton-site.com"        // Ton domaine en production (à remplacer)
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
-app.use('/api/hotel',hotel);
+app.use('/api/auth', authRoute);
 
-app.get('/',(req,res)=>{
-    res.send('Bienvenue sur mon serveur')
-} );
+app.use('/api/hotels', hotelRoute);
 
-const PORT = process.env.PORT;
+app.use("/api/upload", uploadRoutes);
 
-app.listen(PORT, ()=>{
-    console.log(`serveur demaré sur http://localhost:${PORT}`)
-})
+app.get('/', (req, res) => {
+    res.send('Bienvenue sur mon serveur');
+});
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`serveur démarré sur http://localhost:${PORT}`);
+});

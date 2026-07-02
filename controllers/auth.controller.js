@@ -7,15 +7,15 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Vérifier si existe
+    
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: 'Utilisateur existe déjà' });
 
-    // Hash password
+    
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Créer user
+    // user
     user = await User.create({
       username,
       email,
@@ -34,11 +34,11 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Vérifier user
+    
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Utilisateur introuvable' });
 
-    // Vérifier password
+    
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Mot de passe incorrect' });
 
