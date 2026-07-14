@@ -20,7 +20,7 @@ app.use(cors({
     "http://localhost:5500",      // Live Server VS Code
     "http://127.0.0.1:5500",     // Live Server alternative
     "http://localhost:3000",      // Si tu testes depuis le backend lui-même
-    "https://ton-site.com"        // Ton domaine en production (à remplacer)
+    "https://projet-pro-eta.vercel.app/"        // Ton domaine en production (à remplacer)
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
